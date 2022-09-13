@@ -53,9 +53,13 @@ func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
   }
 
   user := models.User{
-    Name:     request.Name,
-    Email:    request.Email,
-    Password: password,
+    FullName:    request.FullName,
+    Email:       request.Email,
+    Password:    password,
+    Gender:      request.Gender,
+    Phone:       request.Phone,
+    Address:     request.Address,
+    Role: "user",
   }
 
   data, err := h.AuthRepository.Register(user)
@@ -65,8 +69,18 @@ func (h *handlerAuth) Register(w http.ResponseWriter, r *http.Request) {
     json.NewEncoder(w).Encode(response)
   }
 
+  registerResponse := authdto.RegisterResponse{
+    FullName: data.FullName,
+    Email:    data.Email,
+    Password: data.Password,
+    Gender:   data.Gender,
+    Phone:    data.Phone,
+    Address:  data.Address,
+    Role: "user",
+  }
+
   w.WriteHeader(http.StatusOK)
-  response := dto.SuccessResult{Code: http.StatusOK, Data: convertResponse(data)}
+  response := dto.SuccessResult{Code: http.StatusOK, Data: registerResponse}
   json.NewEncoder(w).Encode(response)
 }
 
@@ -117,7 +131,6 @@ func (h *handlerAuth) Login(w http.ResponseWriter, r *http.Request) {
   }
 
   loginResponse := authdto.LoginResponse{
-    Name:     user.Name,
     Email:    user.Email,
     Token:    token,
   }
