@@ -82,19 +82,12 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 
 
 	year, _ := strconv.Atoi(r.FormValue("year"))
-
-	var categoriesId []int
-	for _, r := range r.FormValue("category_id") {
-		if int(r-'0') >= 0 {
-			categoriesId = append(categoriesId, int(r-'0'))
-		}
-	}
-
+	category_id, _ := strconv.Atoi(r.FormValue("category_id"))
 	request := filmdto.FilmRequest{
 		Title:		         r.FormValue("title"),
 		ThumbnailFilm:   	 r.FormValue("thumbnailFilm"),
 		Year:        		 year,
-		CategoryID: 		 categoriesId,
+		CategoryID:  		category_id,
 		Desc:       		 r.FormValue("desc"),
 	}
 
@@ -107,14 +100,12 @@ func (h *handlerFilm) CreateFilm(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	category, _ := h.FilmRepository.FindCategoriesById(categoriesId)
-
-
 	film := models.Film{
 		Title:   request.Title,
 		ThumbnailFilm:  filename,
 		Year:    request.Year,
-		Category: category,
+		CategoryID:    category_id,
+		Category:      models.CategoryResponse{},
 		Desc:   request.Desc,
 	}
 

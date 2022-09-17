@@ -75,9 +75,10 @@ func (h *handlerEpisode) CreateEpisode(w http.ResponseWriter, r *http.Request) {
 
 	episode := models.Episode{
 		Title: request.Title,
-		ThumbnailFilm: request.ThumbnailFilm,
+		ThumbnailEpisode: request.ThumbnailEpisode,
 		LinkFilm: request.LinkFilm,
 		FilmID: request.FilmID,
+		Film: models.FilmResponseEps{},
 	}
 
 	data, err := h.EpisodeRepository.CreateEpisode(episode)
@@ -115,8 +116,8 @@ func (h *handlerEpisode) UpdateEpisode(w http.ResponseWriter, r *http.Request) {
 	if request.Title != "" {
 		episode.Title = request.Title
 	}
-	if request.ThumbnailFilm != "" {
-		episode.ThumbnailFilm = request.ThumbnailFilm
+	if request.ThumbnailEpisode != "" {
+		episode.ThumbnailEpisode = request.ThumbnailEpisode
 	}
 	if request.LinkFilm != "" {
 		episode.LinkFilm = request.LinkFilm
